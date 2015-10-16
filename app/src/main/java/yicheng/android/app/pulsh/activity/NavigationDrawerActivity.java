@@ -1,6 +1,8 @@
 package yicheng.android.app.pulsh.activity;
 
 import android.app.Fragment;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -8,7 +10,25 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.squareup.picasso.Picasso;
 
 import yicheng.android.app.pulsh.R;
 
@@ -17,11 +37,9 @@ import yicheng.android.app.pulsh.R;
  */
 public class NavigationDrawerActivity extends AppCompatActivity {
 
-    DrawerLayout activity_navigation_drawer_layout;
+    FrameLayout framelayout;
 
-    FrameLayout activity_navigation_drawer_content_framelayout;
-
-    NavigationView activity_navigation_drawer_navigation_view;
+    Drawer drawer;
 
     private final Handler drawerActionHandler = new Handler();
 
@@ -35,12 +53,12 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
 
-   /*     if (null == savedInstanceState) {
+     /*   if (null == savedInstanceState) {
             curDrawerItemId = R.id.drawer_market;
         } else {
             curDrawerItemId = savedInstanceState.getInt(DRAWER_ID);
-        }*/
-
+        }
+*/
 
         initiateComponents();
 
@@ -49,22 +67,75 @@ public class NavigationDrawerActivity extends AppCompatActivity {
 
     }
 
-    private void initiateComponents(){
-        activity_navigation_drawer_layout = (DrawerLayout) findViewById(R.id.activity_navigation_drawer_layout);
+    private void initiateComponents() {
+        framelayout = (FrameLayout) findViewById(R.id.activity_navigation_drawer_framelayout);
 
-        activity_navigation_drawer_content_framelayout = (FrameLayout) findViewById(R.id.activity_navigation_drawer_content_framelayout);
+        initiateDrawer();
 
-        activity_navigation_drawer_navigation_view = (NavigationView) findViewById(R.id.activity_navigation_drawer_navigation_view);
 
-        activity_navigation_drawer_navigation_view.getMenu().findItem(curDrawerItemId).setChecked(true);
-
-        navigate(curDrawerItemId);
+      //  navigate(curDrawerItemId);
 
     }
 
+    private void initiateDrawer() {
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Picasso.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
 
-    private void setComponentControl(){
-        setNavigationViewControl();
+            @Override
+            public void cancel(ImageView imageView) {
+                Picasso.with(imageView.getContext()).cancelRequest(imageView);
+            }
+
+    /*
+    @Override
+    public Drawable placeholder(Context ctx) {
+        return super.placeholder(ctx);
+    }
+
+    @Override
+    public Drawable placeholder(Context ctx, String tag) {
+        return super.placeholder(ctx, tag);
+    }
+    */
+        });
+
+
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("item 1").withIcon(GoogleMaterial.Icon.gmd_wb_sunny);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("item 2").withIcon(GoogleMaterial.Icon.gmd_wb_sunny);
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.favorite)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon(getResources().getDrawable(R.drawable.ic_action_market))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+
+        drawer = new DrawerBuilder().withActivity(this)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(item1, item2, item2, new DividerDrawerItem(), new SecondaryDrawerItem().withName("Setting"))
+
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int i, IDrawerItem iDrawerItem) {
+                        Toast.makeText(getBaseContext(), "" + i, Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+                }).build();
+    }
+
+
+    private void setComponentControl() {
+
     }
 
 
@@ -99,32 +170,9 @@ public class NavigationDrawerActivity extends AppCompatActivity {
         getFragmentManager()
                 .beginTransaction()
                 .replace(
-                        R.id.activity_navigation_drawer_content_framelayout,
+                        R.id.activity_navigation_drawer_framelayout,
                         frontFragment).commit();
 
     }
 
-    private void setNavigationViewControl() {
-        activity_navigation_drawer_navigation_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(final MenuItem menuItem) {
-                menuItem.setChecked(true);
-                curDrawerItemId = menuItem.getItemId();
-
-                // allow some time after closing the drawer before performing real navigation
-                // so the user can see what is happening
-                activity_navigation_drawer_layout.closeDrawer(GravityCompat.START);
-
-
-                drawerActionHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        navigate(curDrawerItemId);
-                    }
-                }, DRAWER_CLOSE_DELAY_MS);
-                return true;
-            }
-        })
-        ;
-    }
 }
