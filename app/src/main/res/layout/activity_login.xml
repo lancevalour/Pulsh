@@ -4,22 +4,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <mehdi.sakout.fancybuttons.FancyButton
-        android:id="@+id/login_share_button"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/favorite" />
+
+
+    <RelativeLayout
+        android:id="@+id/login_input_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingLeft="20dp"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_username_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/login_username_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="text" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/login_password_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/login_username_layout"
+            android:layout_marginTop="24dp">
+
+            <EditText
+                android:id="@+id/login_password_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:inputType="textPassword" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/login_title_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/login_input_layout"
+        android:fontFamily="@string/font_display2"
+        android:text="Pulsh"
+        android:textColor="@color/text_secondary_light"
+        android:textSize="@dimen/font_size_display1" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+
+        android:id="@+id/login_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_input_layout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="44dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
+
+
         fancy:fb_borderColor="#FFFFFF"
         fancy:fb_borderWidth="1dp"
-        fancy:fb_defaultColor="#7ab800"
-        fancy:fb_focusColor="#9bd823"
-        fancy:fb_fontIconResource="&#xf04b;"
+        fancy:fb_defaultColor="@color/theme_primary"
+        fancy:fb_focusColor="@color/theme_primary_dark"
+        fancy:fb_fontIconResource="&#xf09b;"
         fancy:fb_iconPosition="left"
         fancy:fb_radius="30dp"
-        fancy:fb_text="SHUFFLE PLAY"
+        fancy:fb_text="LOG IN"
         fancy:fb_textColor="#FFFFFF" />
 </RelativeLayout>

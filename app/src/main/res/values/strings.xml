@@ -1,3 +1,21 @@
 <resources>
+    <!--App Name-->
     <string name="app_name">Pulsh</string>
+
+
+    <!--Font Family-->
+    <string name="font_display1">sans-serif</string>
+    <string name="font_display2">@string/font_display1</string>
+    <string name="font_display3">@string/font_display1</string>
+    <string name="font_display4">sans-serif-light</string>
+    <string name="font_headline">@string/font_display1</string>
+    <string name="font_title">sans-serif-medium</string>
+    <string name="font_subheading">@string/font_display1</string>
+    <string name="font_body2">@string/font_title</string>
+    <string name="font_body1">@string/font_display1</string>
+    <string name="font_caption">@string/font_display1</string>
+    <string name="font_button">@string/font_title</string>
+
+
+
 </resources>
