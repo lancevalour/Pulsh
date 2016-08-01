@@ -102,7 +102,6 @@ public class NavigationDrawerActivity extends AppCompatActivity {
     */
         });
 
-
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withName("item 1").withIcon(GoogleMaterial.Icon.gmd_wb_sunny);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withName("item 2").withIcon(GoogleMaterial.Icon.gmd_wb_sunny);
         AccountHeader headerResult = new AccountHeaderBuilder()

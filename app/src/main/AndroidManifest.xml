@@ -13,19 +13,28 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="ACTIVITY_NAVIGATION_DRAWER" />
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.SplashActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
 
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="ACTIVITY_LOGIN" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
 
 
     </application>

@@ -16,6 +16,16 @@
     <string name="font_caption">@string/font_display1</string>
     <string name="font_button">@string/font_title</string>
 
+    <!--Title-->
+    <string name="drawer_title_market">Market</string>
+    <string name="drawer_title_trending">Trending</string>
+    <string name="drawer_title_portfolio">Portfolio</string>
+    <string name="drawer_title_favorite">Favorite</string>
+    <string name="drawer_title_settings">Settings</string>
+
+    <!--Hint-->
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
 
 
 </resources>

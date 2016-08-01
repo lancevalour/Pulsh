@@ -2,43 +2,32 @@ package yicheng.android.app.pulsh.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.TextInputLayout;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
-import com.squareup.picasso.Picasso;
+import com.nvanbenschoten.motion.ParallaxImageView;
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.HawkBuilder;
+import com.orhanobut.hawk.LogLevel;
 
-import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
 import java.io.IOException;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 import yicheng.android.app.pulsh.R;
+import yicheng.android.app.pulsh.model.HawkPersistence;
 
 /**
  * Created by ZhangY on 10/11/2015.
  */
 public class LoginActivity extends Activity {
+    ParallaxImageView login_imageView;
+
+
     FancyButton login_login_button;
     TextInputLayout login_username_layout, login_password_layout;
 
@@ -46,6 +35,8 @@ public class LoginActivity extends Activity {
 
     Handler handler;
 
+    String backgroundImageURL =
+            "http://www.bluthemes.com/assets/img/blog/12/rocket-night.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +51,18 @@ public class LoginActivity extends Activity {
         setComponentControl();
     }
 
+    private void saveLocalUserLogin() {
+        Hawk.init(this).setEncryptionMethod(HawkBuilder.EncryptionMethod.MEDIUM)
+                .setStorage(HawkBuilder.newSharedPrefStorage(this))
+                .setLogLevel(LogLevel.FULL)
+                .build();
+
+        Hawk.chain().put(HawkPersistence.KEY_IS_LOGGED_IN, true)
+                .put(HawkPersistence.KEY_USERNAME, login_username_layout.getEditText().getText().toString().trim())
+                .put(HawkPersistence.KEY_PASSWORD, login_password_layout.getEditText().getText().toString().trim())
+                .commit();
+    }
+
     private void setHandlerControl() {
         handler = new Handler() {
             @Override
@@ -67,6 +70,8 @@ public class LoginActivity extends Activity {
                 switch (msg.what) {
                     case 1: {
                         if (isAuthenticated) {
+                            saveLocalUserLogin();
+
                             goToNavigationDrawerActivity();
                         }
                     }
@@ -77,6 +82,13 @@ public class LoginActivity extends Activity {
     }
 
     private void initiateComponents() {
+        login_imageView = (ParallaxImageView) findViewById(R.id.login_imageView);
+      /*  Picasso.with(getBaseContext())
+                .load(R.drawable.favorite)
+                .into(login_imageView);*/
+
+        login_imageView.registerSensorManager();
+
         login_login_button = (FancyButton) findViewById(R.id.login_login_button);
         login_username_layout = (TextInputLayout) findViewById(R.id.login_username_layout);
         login_password_layout = (TextInputLayout) findViewById(R.id.login_password_layout);
@@ -124,7 +136,6 @@ public class LoginActivity extends Activity {
                             github = GitHub.connectUsingPassword(login_username_layout.getEditText().getText().toString().trim(),
                                     login_password_layout.getEditText().getText().toString().trim());
 
-
                             isAuthenticated = github.isCredentialValid();
 
                             System.out.println(isAuthenticated);
@@ -146,5 +157,9 @@ public class LoginActivity extends Activity {
         return true;
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        login_imageView.unregisterSensorManager();
+    }
 }
